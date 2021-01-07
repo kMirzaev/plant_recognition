@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 import 'package:plant_recognition/cure.dart';
+import 'functionsAndVariables.dart';
 
 class App extends StatelessWidget {
   @override
@@ -19,13 +19,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyImagePickerState extends State {
-  File imageURI;
-  String result;
-  String path;
   List _recognitions;
-  String diseaseName;
 
-  Future getImageFromCamera() async {
+  getImageFromCamera() async {
     // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
@@ -35,7 +31,7 @@ class _MyImagePickerState extends State {
     });
   }
 
-  Future getImageFromGallery() async {
+  getImageFromGallery() async {
     // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -45,7 +41,7 @@ class _MyImagePickerState extends State {
     });
   }
 
-  Future classifyImage() async {
+  classifyImage() async {
     await Tflite.loadModel(
         model: "assets/model/model_unquant.tflite",
         labels: "assets/model/labels.txt");
@@ -62,9 +58,11 @@ class _MyImagePickerState extends State {
   }
 
   handleCure() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => Cure(diseaseName),
-    ));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Cure(diseaseName),
+      ),
+    );
   }
 
   @override
@@ -84,39 +82,13 @@ class _MyImagePickerState extends State {
                 ? Text('No image selected.')
                 : Image.file(imageURI,
                     width: 300, height: 200, fit: BoxFit.cover),
-            Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: RaisedButton.icon(
-                  onPressed: () => getImageFromCamera(),
-                  label: Text('Click Here To Select Image From Camera'),
-                  textColor: Colors.white,
-                  color: Colors.teal,
-                  icon: Icon(Icons.camera),
-                  padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                )),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: RaisedButton.icon(
-                onPressed: () => getImageFromGallery(),
-                label: Text('Click Here To Select Image From Gallery'),
-                icon: Icon(Icons.image),
-                textColor: Colors.white,
-                color: Colors.teal,
-                padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-              ),
-            ),
+            buildContainer(
+                cameraButtonText, getImageFromCamera, cameraButtonIcon),
+            buildContainer(
+                galleryButtonText, getImageFromGallery, galleryButtonIcon),
             if (imageURI != null)
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: RaisedButton.icon(
-                  onPressed: () => classifyImage(),
-                  label: Text('Classify Image'),
-                  icon: Icon(Icons.book),
-                  textColor: Colors.white,
-                  color: Colors.teal,
-                  padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                ),
-              ),
+              buildContainer(
+                  classifyButtonText, classifyImage, classifyButtonIcon),
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
               child: Column(
@@ -130,24 +102,13 @@ class _MyImagePickerState extends State {
                             color: Colors.white,
                             fontSize: 15.0,
                             backgroundColor: Colors.green.shade400,
-
                           ),
                         );
                       }).toList(),
               ),
             ),
             if (diseaseName != null)
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: RaisedButton.icon(
-                  onPressed: handleCure,
-                  label: Text("Cure"),
-                  icon: Icon(Icons.bolt),
-                  textColor: Colors.white,
-                  color: Colors.teal,
-                  padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                ),
-              ),
+              buildContainer(cureButtonText, handleCure, cureButtonIcon),
           ],
         ),
       ),
