@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 File imageURI;
@@ -15,12 +14,15 @@ Icon classifyButtonIcon = Icon(Icons.book);
 String cureButtonText = 'Cure';
 Icon cureButtonIcon = Icon(Icons.bolt);
 
-Container buildContainer(
-    String buttonText, Function buttonAction, Icon buttonIcon) {
+Container buildContainer(String buttonText, Function buttonAction,
+    Icon buttonIcon, Function togleVisibility) {
   return Container(
     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
     child: RaisedButton.icon(
-      onPressed: () => buttonAction(),
+      onPressed: () {
+        buttonAction();
+        togleVisibility();
+      },
       label: Text(buttonText),
       textColor: Colors.white,
       color: Colors.teal,
@@ -29,4 +31,3 @@ Container buildContainer(
     ),
   );
 }
-

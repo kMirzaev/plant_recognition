@@ -48,7 +48,7 @@ class Cure extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Αναγνώριση ασθενειών φυτών'),
+        title: Text('Cure Advice'),
         backgroundColor: Colors.teal,
       ),
       body: Column(

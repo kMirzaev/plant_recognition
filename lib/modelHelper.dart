@@ -20,6 +20,13 @@ class MyApp extends StatefulWidget {
 
 class _MyImagePickerState extends State {
   List _recognitions;
+  bool setVisibility = false;
+
+  togleView() {
+    setState(() {
+      setVisibility = !setVisibility;
+    });
+  }
 
   getImageFromCamera() async {
     // ignore: deprecated_member_use
@@ -82,33 +89,42 @@ class _MyImagePickerState extends State {
                 ? Text('No image selected.')
                 : Image.file(imageURI,
                     width: 300, height: 200, fit: BoxFit.cover),
-            buildContainer(
-                cameraButtonText, getImageFromCamera, cameraButtonIcon),
-            buildContainer(
-                galleryButtonText, getImageFromGallery, galleryButtonIcon),
-            if (imageURI != null)
-              buildContainer(
-                  classifyButtonText, classifyImage, classifyButtonIcon),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Column(
-                children: _recognitions == null
-                    ? []
-                    : _recognitions.map((res) {
-                        diseaseName = res['label'].substring(3);
-                        return Text(
-                          "$diseaseName - ${(res["confidence"] * 100).toStringAsFixed(0)}%",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                            backgroundColor: Colors.green.shade400,
-                          ),
-                        );
-                      }).toList(),
+            buildContainer(cameraButtonText, getImageFromCamera,
+                cameraButtonIcon, togleView),
+            buildContainer(galleryButtonText, getImageFromGallery,
+                galleryButtonIcon, togleView),
+            Visibility(
+              visible: setVisibility,
+              child: buildContainer(classifyButtonText, classifyImage,
+                  classifyButtonIcon, togleView),
+            ),
+            Visibility(
+              visible: !setVisibility,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Column(
+                  children: _recognitions == null
+                      ? []
+                      : _recognitions.map((res) {
+                          diseaseName = res['label'].substring(3);
+                          return Text(
+                            "$diseaseName - ${(res["confidence"] * 100).toStringAsFixed(0)}%",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0,
+                              backgroundColor: Colors.green.shade400,
+                            ),
+                          );
+                        }).toList(),
+                ),
               ),
             ),
             if (diseaseName != null)
-              buildContainer(cureButtonText, handleCure, cureButtonIcon),
+              Visibility(
+                visible: !setVisibility,
+                child: buildContainer(
+                    cureButtonText, handleCure, cureButtonIcon, togleView),
+              ),
           ],
         ),
       ),
