@@ -15,19 +15,21 @@ String cureButtonText = 'Cure';
 Icon cureButtonIcon = Icon(Icons.bolt);
 
 Container buildContainer(String buttonText, Function buttonAction,
-    Icon buttonIcon, Function togleVisibility) {
+    Icon buttonIcon) {
   return Container(
     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
     child: RaisedButton.icon(
       onPressed: () {
         buttonAction();
-        togleVisibility();
       },
       label: Text(buttonText),
       textColor: Colors.white,
       color: Colors.teal,
       icon: buttonIcon,
       padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+      elevation: 5.0,
     ),
   );
 }

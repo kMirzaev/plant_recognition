@@ -20,13 +20,9 @@ class MyApp extends StatefulWidget {
 
 class _MyImagePickerState extends State {
   List _recognitions;
-  bool setVisibility = false;
-
-  togleView() {
-    setState(() {
-      setVisibility = !setVisibility;
-    });
-  }
+  bool classifyButtonVisibility = false;
+  bool diseaseLabelVisibility = false;
+  bool cureButtonVisibility = false;
 
   getImageFromCamera() async {
     // ignore: deprecated_member_use
@@ -35,6 +31,9 @@ class _MyImagePickerState extends State {
     setState(() {
       imageURI = image;
       path = image.path;
+      classifyButtonVisibility = true;
+      diseaseLabelVisibility = false;
+      cureButtonVisibility = false;
     });
   }
 
@@ -45,6 +44,9 @@ class _MyImagePickerState extends State {
     setState(() {
       imageURI = image;
       path = image.path;
+      classifyButtonVisibility = true;
+      diseaseLabelVisibility = false;
+      cureButtonVisibility = false;
     });
   }
 
@@ -54,13 +56,16 @@ class _MyImagePickerState extends State {
         labels: "assets/model/labels.txt");
     var output = await Tflite.runModelOnImage(
       path: path,
-      numResults: 1,
+      numResults: 3,
       threshold: 0.05,
       imageMean: 127.5,
       imageStd: 127.5,
     );
     setState(() {
       _recognitions = output;
+      classifyButtonVisibility = false;
+      diseaseLabelVisibility = true;
+      cureButtonVisibility = true;
     });
   }
 
@@ -90,16 +95,15 @@ class _MyImagePickerState extends State {
                 : Image.file(imageURI,
                     width: 300, height: 200, fit: BoxFit.cover),
             buildContainer(cameraButtonText, getImageFromCamera,
-                cameraButtonIcon, togleView),
+                cameraButtonIcon),
             buildContainer(galleryButtonText, getImageFromGallery,
-                galleryButtonIcon, togleView),
+                galleryButtonIcon),
+              Visibility(
+                child: buildContainer(classifyButtonText, classifyImage,
+                    classifyButtonIcon),
+                visible: classifyButtonVisibility,
+              ),
             Visibility(
-              visible: setVisibility,
-              child: buildContainer(classifyButtonText, classifyImage,
-                  classifyButtonIcon, togleView),
-            ),
-            Visibility(
-              visible: !setVisibility,
               child: Container(
                 margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Column(
@@ -110,20 +114,28 @@ class _MyImagePickerState extends State {
                           return Text(
                             "$diseaseName - ${(res["confidence"] * 100).toStringAsFixed(0)}%",
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                              backgroundColor: Colors.green.shade400,
+                              color: Colors.green,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.combine([
+                                TextDecoration.underline,
+                                TextDecoration.overline
+                              ]),
+                              decorationThickness: 2.0,
+                              decorationColor: Colors.lightGreen,
+                              decorationStyle: TextDecorationStyle.dashed,
                             ),
                           );
                         }).toList(),
                 ),
               ),
+              visible: diseaseLabelVisibility,
             ),
-            if (diseaseName != null)
+
               Visibility(
-                visible: !setVisibility,
                 child: buildContainer(
-                    cureButtonText, handleCure, cureButtonIcon, togleView),
+                    cureButtonText, handleCure, cureButtonIcon),
+                visible: cureButtonVisibility,
               ),
           ],
         ),
