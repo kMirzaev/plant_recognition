@@ -5,6 +5,7 @@ File imageURI;
 String result;
 String path;
 String diseaseName;
+String firstDisease;
 String cameraButtonText = 'Click Here To Select Image From Camera';
 Icon cameraButtonIcon = Icon(Icons.camera);
 String galleryButtonText = 'Click Here To Select Image From Gallery';
