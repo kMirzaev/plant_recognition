@@ -71,7 +71,8 @@ class Cure extends StatelessWidget {
     "Tomato___Leaf_Mold":
     "By adequating row and plant spacing that promote better air circulation through the canopy reducing the humidity; preventing excessive nitrogen on fertilization since nitrogen out of balance enhances foliage disease development.",
     "Tomato___Late_blight":
-    "Remove all affected leaves and burn them or place them in the garbage. Mulch around the base of the plant with straw, wood chips or other natural mulch to prevent fungal spores in the soil from splashing on the plant."
+    "Remove all affected leaves and burn them or place them in the garbage. Mulch around the base of the plant with straw, wood chips or other natural mulch to prevent fungal spores in the soil from splashing on the plant.",
+    "Background_without_leaves":"There is no visible plant on image"
   };
 
   @override

@@ -100,61 +100,63 @@ class _MyImagePickerState extends State {
         backgroundColor: Colors.teal,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            imageURI == null
-                ? Text('No image selected.')
-                : Image.file(imageURI,
-                    width: 300, height: 200, fit: BoxFit.cover),
-            buildContainer(
-                cameraButtonText, getImageFromCamera, cameraButtonIcon),
-            buildContainer(
-                galleryButtonText, getImageFromGallery, galleryButtonIcon),
-            Visibility(
-              child: buildContainer(
-                  classifyButtonText, classifyImage, classifyButtonIcon),
-              visible: classifyButtonVisibility,
-            ),
-            Visibility(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Column(
-                  children: _recognitions == null
-                      ? []
-                      : _recognitions.map((res) {
-                          diseaseName = res['label'];
-                          var split = diseaseName.split(' ');
-                          diseaseName = split.skip(1).join(' ');
-
-                         firstDisease = _recognitions.first['label'];
-                          var split2 = firstDisease.split(' ');
-                          firstDisease = split2.skip(1).join(' ');
-                          return Text(
-                            "$diseaseName - ${(res["confidence"] * 100).toStringAsFixed(0)}%",
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.combine([
-                                TextDecoration.underline,
-                                TextDecoration.overline
-                              ]),
-                              decorationThickness: 2.0,
-                              decorationColor: Colors.lightGreen,
-                              decorationStyle: TextDecorationStyle.dashed,
-                            ),
-                          );
-                        }).toList(),
-                ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              imageURI == null
+                  ? Text('No image selected.')
+                  : Image.file(imageURI,
+                      width: 300, height: 200, fit: BoxFit.cover),
+              buildContainer(
+                  cameraButtonText, getImageFromCamera, cameraButtonIcon),
+              buildContainer(
+                  galleryButtonText, getImageFromGallery, galleryButtonIcon),
+              Visibility(
+                child: buildContainer(
+                    classifyButtonText, classifyImage, classifyButtonIcon),
+                visible: classifyButtonVisibility,
               ),
-              visible: diseaseLabelVisibility,
-            ),
-            Visibility(
-              child: buildContainer(cureButtonText, handleCure, cureButtonIcon),
-              visible: cureButtonVisibility,
-            ),
-          ],
+              Visibility(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: Column(
+                    children: _recognitions == null
+                        ? []
+                        : _recognitions.map((res) {
+                            diseaseName = res['label'];
+                            var split = diseaseName.split(' ');
+                            diseaseName = split.skip(1).join(' ');
+
+                           firstDisease = _recognitions.first['label'];
+                            var split2 = firstDisease.split(' ');
+                            firstDisease = split2.skip(1).join(' ');
+                            return Text(
+                              "$diseaseName - ${(res["confidence"] * 100).toStringAsFixed(0)}%",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.combine([
+                                  TextDecoration.underline,
+                                  TextDecoration.overline
+                                ]),
+                                decorationThickness: 2.0,
+                                decorationColor: Colors.lightGreen,
+                                decorationStyle: TextDecorationStyle.dashed,
+                              ),
+                            );
+                          }).toList(),
+                  ),
+                ),
+                visible: diseaseLabelVisibility,
+              ),
+              Visibility(
+                child: buildContainer(cureButtonText, handleCure, cureButtonIcon),
+                visible: cureButtonVisibility,
+              ),
+            ],
+          ),
         ),
       ),
     );

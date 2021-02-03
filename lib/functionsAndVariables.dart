@@ -18,6 +18,7 @@ Icon cureButtonIcon = Icon(Icons.bolt);
 Container buildContainer(String buttonText, Function buttonAction,
     Icon buttonIcon) {
   return Container(
+    width: double.infinity,
     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
     child: RaisedButton.icon(
       onPressed: () {
@@ -27,7 +28,7 @@ Container buildContainer(String buttonText, Function buttonAction,
       textColor: Colors.white,
       color: Colors.teal,
       icon: buttonIcon,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
       shape:
           RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       elevation: 5.0,
