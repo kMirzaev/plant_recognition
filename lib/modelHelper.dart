@@ -29,8 +29,7 @@ class _MyImagePickerState extends State {
   bool cureButtonVisibility = false;
 
   getImageFromCamera() async {
-    // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    PickedFile image = await ImagePicker().getImage(source: ImageSource.camera);
 
     File compressedFile = await FlutterNativeImage.compressImage(image.path, quality: 80,
         targetWidth: 256, targetHeight: 256);
@@ -46,8 +45,7 @@ class _MyImagePickerState extends State {
   }
 
   getImageFromGallery() async {
-    // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    PickedFile image = await ImagePicker().getImage(source: ImageSource.gallery);
 
     File compressedFile = await FlutterNativeImage.compressImage(image.path, quality: 80,
         targetWidth: 256, targetHeight: 256);
